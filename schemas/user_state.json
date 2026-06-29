@@ -1,0 +1,57 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "FamilyStateMatrix",
+    "type": "object",
+    "properties": {
+        "family_id": { "type": "string", "format": "uuid" },
+        "resource_constraints": {
+            "type": "object",
+            "properties": {
+                "monthly_budget_cap_cny": { "type": "number", "minimum": 0 },
+                "weekly_parental_time_hours": { "type": "integer", "minimum": 0 }
+            },
+            "required": ["monthly_budget_cap_cny", "weekly_parental_time_hours"]
+        },
+        "children_profiles": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "child_id": { "type": "string", "format": "uuid" },
+                    "meta_data": {
+                        "type": "object",
+                        "properties": {
+                            "current_school_stage": { "type": "string" },
+                            "geographic_district": { "type": "string" }
+                        },
+                        "required": ["current_school_stage", "geographic_district"]
+                    },
+                    "academic_knowledge_map": {
+                        "type": "object",
+                        "properties": {
+                            "completed_nodes": { "type": "array", "items": { "type": "string" } },
+                            "error_logs_rca_summary": {
+                                "type": "object",
+                                "properties": {
+                                    "concept_confusion": { "type": "integer", "minimum": 0 },
+                                    "careless_mistake": { "type": "integer", "minimum": 0 },
+                                    "reading_comprehension_error": { "type": "integer", "minimum": 0 }
+                                }
+                            }
+                        }
+                    },
+                    "physical_performance": {
+                        "type": "object",
+                        "properties": {
+                            "height_cm": { "type": "number", "minimum": 50 },
+                            "weight_kg": { "type": "number", "minimum": 10 },
+                            "cardio_endurance_score": { "type": "number", "minimum": 0, "maximum": 100 }
+                        }
+                    }
+                },
+                "required": ["child_id", "meta_data", "academic_knowledge_map", "physical_performance"]
+            }
+        }
+    },
+    "required": ["family_id", "resource_constraints", "children_profiles"]
+}

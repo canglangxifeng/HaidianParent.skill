@@ -1,0 +1,30 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "ErrorLogsRCA",
+    "type": "object",
+    "properties": {
+        "session_id": { "type": "string", "format": "uuid" },
+        "child_id": { "type": "string", "format": "uuid" },
+        "math_errors": {
+            "type": "object",
+            "properties": {
+                "concept_confusion": { "type": "integer", "minimum": 0 },
+                "careless_mistake": { "type": "integer", "minimum": 0 },
+                "reading_comprehension_error": { "type": "integer", "minimum": 0 }
+            }
+        },
+        "chinese_errors": {
+            "type": "object",
+            "properties": {
+                "concept_confusion": { "type": "integer", "minimum": 0 },
+                "careless_mistake": { "type": "integer", "minimum": 0 },
+                "reading_comprehension_error": { "type": "integer", "minimum": 0 }
+            }
+        },
+        "rca_action": {
+            "type": "string",
+            "enum": ["REMEDIATE_CONCEPT", "HABIT_CORRECTION", "READING_DRILL", "MIXED"]
+        }
+    },
+    "required": ["session_id", "child_id", "rca_action"]
+}

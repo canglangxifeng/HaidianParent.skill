@@ -1,0 +1,30 @@
+{
+    "name": "policy_crawler",
+    "description": "教育政策动态抓取网关 – 定时获取最新学区政策文件",
+    "endpoint": "https://crawler.haidian.gov.cn/v1",
+    "methods": [
+        {
+            "name": "get_district_zoning",
+            "description": "获取特定行政区域的学区划分",
+            "params": {
+                "district_name": "string"
+            },
+            "returns": {
+                "schools": "array",
+                "zoning_map": "string"
+            }
+        },
+        {
+            "name": "get_admission_policy",
+            "description": "获取入学政策细则",
+            "params": {
+                "year": "integer",
+                "stage": ["kindergarten", "primary", "middle"]
+            },
+            "returns": {
+                "policy_text": "string",
+                "deadlines": "array"
+            }
+        }
+    ]
+}

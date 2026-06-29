@@ -1,0 +1,31 @@
+{
+  "id": "HaidianParent.skill",
+  "version": "1.0.0",
+  "author": "Copyright (c) 2026 Project Team",
+  "description": "海淀家长智能体 - 基于 Zoo Platform Skill Specification v1.0",
+  "license": {
+    "framework": "MIT",
+    "prompts_and_knowledge": "CC-BY-NC-SA-4.0"
+  },
+  "runtime": "zoo-agent-v2",
+  "capabilities": [
+    "rag_router",
+    "multi_entity_memory",
+    "function_calling"
+  ],
+  "storage": {
+    "vector_databases": [
+      {
+        "id": "kb_methodology",
+        "strategy": "strict_alignment",
+        "weight": 0.7
+      },
+      {
+        "id": "kb_regulatory",
+        "strategy": "hybrid_search",
+        "weight": 0.3
+      }
+    ],
+    "key_value_store": "user_state_kv"
+  }
+}

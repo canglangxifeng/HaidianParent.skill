@@ -1,0 +1,47 @@
+{
+  "name": "question_bank_router",
+  "description": "结构化题库交互接口 – 调用外部题库 API 获取知识点、题目、错题分析",
+  "endpoint": "https://api.questionbank.haidian/v1",
+  "methods": [
+    {
+      "name": "get_knowledge_point",
+      "description": "根据知识点 ID 获取题目列表",
+      "params": {
+        "knowledge_point_id": "string",
+        "difficulty_level": ["easy", "medium", "hard"]
+      },
+      "returns": {
+        "questions": "array",
+        "total_count": "integer"
+      }
+    },
+    {
+      "name": "submit_error_log",
+      "description": "提交错题记录并获取 RCA（根因分析）",
+      "params": {
+        "child_id": "uuid",
+        "question_id": "string",
+        "selected_answer": "string",
+        "correct_answer": "string",
+        "time_spent_seconds": "integer"
+      },
+      "returns": {
+        "rca_category": ["concept_confusion", "careless_mistake", "reading_comprehension_error"],
+        "recommended_action": ["REMEDIATE_CONCEPT", "HABIT_CORRECTION", "READING_DRILL"]
+      }
+    },
+    {
+      "name": "get_remedial_materials",
+      "description": "根据错题类型获取补救素材",
+      "params": {
+        "rca_category": "string",
+        "subject": ["math", "chinese", "english"]
+      },
+      "returns": {
+        "videos": "array",
+        "exercises": "array",
+        "explanations": "array"
+      }
+    }
+  ]
+}
