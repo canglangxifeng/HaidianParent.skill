@@ -1,0 +1,89 @@
+# 任务流水线配置
+# Tasks Configuration for Haidian Parents Agent System
+
+# 核心任务定义
+tasks:
+  # 任务1: 政策事实提取与审计
+  policy_audit_task:
+    name: "教委政策无噪音审计"
+    description: "从官方PDF文件中提取绝对事实陈述，生成无推测结论的审计报告"
+    expected_output: |
+      一份结构化的事实审计报告，包含：
+      1. 政策文件基本信息（发布时间、适用范围）
+      2. 关键参数列表（分数线、派位比例、时间节点）
+      3. 事实陈述汇总（每项陈述附带原始出处）
+      4. 识别出的潜在歧义点（不含解读）
+    agent: "policy_auditor"
+    context: []
+    tools:
+      - "mcp_policy_extractor"
+    async_execution: false
+    output_file: "reports/policy_audit_{{timestamp}}.md"
+
+  # 任务2: 物理约束下的升学规划
+ 升学_planning_task:
+    name: "约束框架内升学路径规划"
+    description: "在时间、财务等物理约束条件下，制定切实可行的升学策略"
+    expected_output: |
+      一份详细的升学规划报告，包含：
+      1. 学生现状分析（成绩、特长、时间可用性）
+      2. 物理约束审计结果（时间漏斗分析、预算检查）
+      3. 推荐升学路径（含风险评级）
+      4. 具体执行计划（时间表、资源分配）
+      5. 应急预案（针对可能的风险场景）
+    agent: "升学_planning_expert"
+    context:
+      - "policy_audit_task"
+    tools:
+      - "time_funnel_analyzer"
+      - "budget_constraint_checker"
+    async_execution: false
+    output_file: "reports/升学_plan_{{timestamp}}.md"
+
+  # 任务3: 高风险决策辩论沙箱
+  debate_sandbox_task:
+    name: "派位志愿填报风险辩论"
+    description: "通过保守派与激进派的3轮刚性辩论，生成中立客观的决策审计报告"
+    expected_output: |
+      一份结构化辩论报告，包含：
+      1. 辩论议题与背景
+      2. 保守派论点与论据（风险规避视角）
+      3. 激进派论点与论据（收益最大化视角）
+      4. 交叉验证度评分
+      5. 综合建议与风险提示
+    agent: "debate_conservative"  # 起始Agent，实际由沙箱控制器管理
+    context:
+      - "policy_audit_task"
+      - "升学_planning_task"
+    tools: []
+    async_execution: true
+    output_file: "reports/debate_audit_{{timestamp}}.md"
+
+# 任务依赖关系图
+workflow:
+  name: "海淀家长智能体标准工作流"
+  description: "标准的三阶段工作流：政策审计 → 升学规划 → 高风险决策辩论"
+  stages:
+    - stage: 1
+      name: "事实确立"
+      tasks: ["policy_audit_task"]
+    
+    - stage: 2
+      name: "规划制定"
+      tasks: ["升学_planning_task"]
+      dependencies: ["policy_audit_task"]
+    
+    - stage: 3
+      name: "风险决策"
+      tasks: ["debate_sandbox_task"]
+      dependencies: ["policy_audit_task", "升学_planning_task"]
+
+# 任务执行配置
+execution:
+  max_retries: 3
+  timeout_seconds: 3600
+  validation_required: true
+  constraint_checkpoints:
+    - "time_funnel_validation"
+    - "budget_validation"
+    - "policy_compliance_check"
